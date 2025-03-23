@@ -1,35 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import {memo, useState} from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+const CounterDisplay = memo(({count}: { count: number }) => {
+    console.log("CounterDisplay перерисован!");
+    return (
+        <div className="p-4 bg-blue-100 rounded-lg shadow-md">
+            <p className="text-blue-800 font-semibold">Текущее значение счётчика: {count}</p>
+        </div>
+    );
+});
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+export default function App() {
+    const [firstCounter, setFirstCounter] = useState(0);
+    const [secondCounter, setSecondCounter] = useState(0);
+
+    return (
+        <div className="flex items-center justify-center h-screen bg-gray-200 flex-col gap-4">
+            <CounterDisplay count={firstCounter}/>
+            <button
+                className="bg-cyan-900 text-white px-4 py-2 hover:bg-cyan-800 active:bg-cyan-600 rounded-2xl transition-colors"
+                onClick={() => setFirstCounter(firstCounter + 1)}
+            >
+                Увеличить первый счётчик {firstCounter}
+            </button>
+            <button
+                className="bg-cyan-900 text-white px-4 py-2 hover:bg-cyan-800 active:bg-cyan-600 rounded-2xl transition-colors"
+                onClick={() => setSecondCounter(secondCounter + 1)}
+            >
+                Увеличить второй счётчик {secondCounter}
+            </button>
+            <div className="p-4 bg-green-100 rounded-lg shadow-md">
+                <p className="text-green-800 font-semibold">Текущее значение второго счётчика: {secondCounter}</p>
+            </div>
+        </div>
+    );
 }
-
-export default App
