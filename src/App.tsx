@@ -1,4 +1,4 @@
-import {memo, useState} from "react";
+import {memo, useMemo, useState} from "react";
 
 const CounterDisplay = memo(({count}: { count: number }) => {
     console.log("CounterDisplay перерисован!");
@@ -13,9 +13,17 @@ export default function App() {
     const [firstCounter, setFirstCounter] = useState(0);
     const [secondCounter, setSecondCounter] = useState(0);
 
+    const expensiveCalculation = useMemo(() => {
+        console.log("Выполняется сложное вычисление...");
+        return Array.from({length: 1000}, (_, i) => i * firstCounter).reduce((a, b) => a + b, 0);
+    }, [firstCounter])
+
     return (
         <div className="flex items-center justify-center h-screen bg-gray-200 flex-col gap-4">
             <CounterDisplay count={firstCounter}/>
+            <div className="p-4 bg-yellow-100 rounded-lg shadow-md">
+                <p className="text-yellow-800 font-semibold">Сложное вычисление: {expensiveCalculation}</p>
+            </div>
             <button
                 className="bg-cyan-900 text-white px-4 py-2 hover:bg-cyan-800 active:bg-cyan-600 rounded-2xl transition-colors"
                 onClick={() => setFirstCounter(firstCounter + 1)}
