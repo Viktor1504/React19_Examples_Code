@@ -1,17 +1,28 @@
-import viteLogo from '/vite.svg'
+import {createContext, ReactNode, useContext} from 'react';
 
-function App() {
+// 1. Создаем контекст с типом
+const NameContext = createContext<string>('');
 
+// 2. Провайдер с именем
+function NameProvider({children}: { children: ReactNode }) {
     return (
-        <>
-            <div>
-                <a href="https://vite.dev" target="_blank">
-                    <img src={viteLogo} className="logo" alt="Vite logo"/>
-                </a>
-            </div>
-            <h1 className={'text-red-600 text-3xl font-bold underline'}>Vite + React</h1>
-        </>
-    )
+        <NameContext.Provider value="Алекс">
+            {children}
+        </NameContext.Provider>
+    );
 }
 
-export default App
+// 3. Компонент, который использует контекст
+function Greeting() {
+    const name = useContext(NameContext);
+    return <h1>Привет, {name}!</h1>;
+}
+
+// 4. Главный компонент
+export default function App() {
+    return (
+        <NameProvider>
+            <Greeting/>
+        </NameProvider>
+    );
+}
