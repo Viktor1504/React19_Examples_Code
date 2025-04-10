@@ -1,10 +1,11 @@
-import {useState} from "react";
+import {useState, FormEvent} from "react";
 
 export const AddUser = ({createUser}: { createUser: (name: string, email: string) => void }) => {
     const [name, setName] = useState<string>("");
     const [email, setEmail] = useState<string>("");
 
-    const handleCreateUser = () => {
+    const handleCreateUser = (e: FormEvent) => {
+        e.preventDefault(); // Предотвращаем перезагрузку страницы
         if (name && email) {
             createUser(name, email);
             setName("");
@@ -13,7 +14,7 @@ export const AddUser = ({createUser}: { createUser: (name: string, email: string
     };
 
     return (
-        <div className="flex items-center justify-between mb-4">
+        <form  onSubmit={handleCreateUser} className="flex items-center justify-between mb-4">
             <input
                 type="text"
                 value={name}
@@ -29,11 +30,11 @@ export const AddUser = ({createUser}: { createUser: (name: string, email: string
                 className="p-2 rounded-lg border border-gray-300"
             />
             <button
+                type="submit"
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
-                onClick={handleCreateUser}
             >
                 Add User
             </button>
-        </div>
+        </form>
     );
 };

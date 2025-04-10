@@ -1,7 +1,8 @@
 import {User} from "../api/api.ts";
 
 export const UserCard = ({user, onRemove}: { user: User; onRemove: (id: string) => void }) => (
-    <section className="bg-white p-4 rounded-lg shadow-md mb-4 flex justify-between items-center hover:bg-gray-100  transition duration-200 cursor-pointer">
+    <section
+        className="bg-white p-4 rounded-lg shadow-md mb-4 flex justify-between items-center hover:bg-gray-100  transition duration-200 cursor-pointer">
         <img
             src={`https://ui-avatars.com/api/?name=${user.name}&size=128`}
             alt={user.name}

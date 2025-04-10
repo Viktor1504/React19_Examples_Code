@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {api, User} from "./api/api.ts";
 import {AxiosError} from "axios";
 import {AddUser} from "./componets/AddUser.tsx";
@@ -9,15 +9,15 @@ export default function App() {
     const [users, setUsers] = useState<User[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number[]>([]);
-    const usersPerPage = 3;
+    const usersPerPage = 3
 
     useEffect(() => {
         api
             .getUsers(currentPage, usersPerPage)
             .then((response) => {
-                const pages = [...Array(response.pages)].map((_, index) => index + 1);
+                const pages = Array.from({length: response.data.pages}, (_, index) => index + 1);
                 setTotalPages(pages);
-                setUsers(response.data);
+                setUsers(response.data.data);
             })
             .catch((error) => {
                 console.error("Error fetching users:", error);
@@ -36,18 +36,15 @@ export default function App() {
             });
     };
 
-    const addNewUser = (name: string, email: string) => {
+    const addNewUser = useCallback((name: string, email: string) => {
         const newUser = {id: crypto.randomUUID(), name, email};
         api
             .createUser(newUser)
-            .then(() => {
-                setUsers((prevUsers) => [...prevUsers, newUser]);
-            })
             .catch((error) => {
                 const axiosError = error as AxiosError | Error;
                 console.error("Error creating user:", axiosError);
             });
-    };
+    }, [])
 
     return (
         <div className="max-w-2xl mx-auto p-6 bg-gray-50 rounded-lg shadow-xl">
