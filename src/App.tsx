@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {api, User} from "./api/api.ts";
 import {AxiosError} from "axios";
 import {AddUser} from "./componets/AddUser.tsx";
@@ -7,8 +7,8 @@ import {Pagination} from "./componets/Pagination.tsx";
 
 export default function App() {
     const [users, setUsers] = useState<User[]>([]);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalPages, setTotalPages] = useState<number[]>([]);
+    const [currentPage, setCurrentPage] = useState<number>(1)
+    const [totalPages, setTotalPages] = useState<number[]>([])
     const usersPerPage = 3
 
     useEffect(() => {
@@ -36,20 +36,10 @@ export default function App() {
             });
     };
 
-    const addNewUser = useCallback((name: string, email: string) => {
-        const newUser = {id: crypto.randomUUID(), name, email};
-        api
-            .createUser(newUser)
-            .catch((error) => {
-                const axiosError = error as AxiosError | Error;
-                console.error("Error creating user:", axiosError);
-            });
-    }, [])
-
     return (
         <div className="max-w-2xl mx-auto p-6 bg-gray-50 rounded-lg shadow-xl">
             <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">User List</h1>
-            <AddUser createUser={addNewUser}/>
+            <AddUser/>
             <Users users={users} removeUser={removeUser}/>
             <Pagination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage}/>
         </div>

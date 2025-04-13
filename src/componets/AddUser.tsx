@@ -1,32 +1,33 @@
-import {useState, FormEvent} from "react";
+import {AxiosError} from "axios";
+import {api} from "../api/api.ts";
 
-export const AddUser = ({createUser}: { createUser: (name: string, email: string) => void }) => {
-    const [name, setName] = useState<string>("");
-    const [email, setEmail] = useState<string>("");
+export const AddUser = () => {
+    const actionHandler = async (formData: FormData): Promise<void> => {
+        const name = formData.get('name') as string;
+        const email = formData.get('email') as string;
 
-    const handleCreateUser = (e: FormEvent) => {
-        e.preventDefault(); // Предотвращаем перезагрузку страницы
-        if (name && email) {
-            createUser(name, email);
-            setName("");
-            setEmail("");
+        const newUser = {id: crypto.randomUUID(), name, email};
+
+        try {
+            await api.createUser(newUser)
+        } catch (error) {
+            const axiosError = error as AxiosError | Error;
+            console.error("Error creating user:", axiosError);
         }
     };
 
     return (
-        <form  onSubmit={handleCreateUser} className="flex items-center justify-between mb-4">
+        <form action={actionHandler} className="flex items-center justify-between mb-4">
             <input
                 type="text"
-                value={name}
+                name='name'
                 placeholder="Name"
-                onChange={(e) => setName(e.currentTarget.value)}
                 className="p-2 rounded-lg border border-gray-300"
             />
             <input
                 type="email"
-                value={email}
+                name='email'
                 placeholder="Email"
-                onChange={(e) => setEmail(e.currentTarget.value)}
                 className="p-2 rounded-lg border border-gray-300"
             />
             <button

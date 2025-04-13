@@ -26,12 +26,15 @@ export const api = {
             params: {_page: page, _per_page: limit},
         });
     },
+    async getUser(id: string): Promise<AxiosResponse<User>> {
+        return await axiosInstance.get<User>(`/users/${id}`);
+    },
 
     async deleteUser(id: string): Promise<AxiosResponse<void>> {
         return await axiosInstance.delete(`/users/${id}`);
     },
 
-    async createUser(user: User): Promise<AxiosResponse<void>> {
-        return await axiosInstance.post("/users", user);
+    async createUser(user: User) {
+        await axiosInstance.post("/users", user);
     },
 };

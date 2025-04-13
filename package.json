@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "json-server --watch server/db.json"
+    "server": "json-server --watch db.json"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.15",
@@ -16,6 +16,7 @@
     "json-server": "1.0.0-beta.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-router": "^7.5.0",
     "tailwindcss": "^4.0.15"
   },
   "devDependencies": {
