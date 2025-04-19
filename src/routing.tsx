@@ -5,7 +5,6 @@ import {UserPage} from "./componets/UserPage.tsx";
 
 export const Routing = () => {
 
-
     return (
         <Routes>
             <Route path="/" element={<App/>}/>

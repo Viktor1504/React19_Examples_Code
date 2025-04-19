@@ -26,8 +26,9 @@ export const api = {
             params: {_page: page, _per_page: limit},
         });
     },
-    async getUser(id: string): Promise<AxiosResponse<User>> {
-        return await axiosInstance.get<User>(`/users/${id}`);
+    async getUser(id: string) {
+        const response = await axiosInstance.get<User>(`/users/${id}`)
+        return response.data
     },
 
     async deleteUser(id: string): Promise<AxiosResponse<void>> {
