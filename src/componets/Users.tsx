@@ -1,7 +1,9 @@
 import {UserCard} from "./UserCard.tsx";
-import {User} from "../api/api.ts";
+import {useAppSelector} from "../store/useAppSelector.ts";
 
-export const Users = ({users, removeUser}: { users: User[], removeUser: (id: string) => void }) => {
+export const Users = () => {
+
+    const users = useAppSelector((state) => state.users.users);
     return (
         <div className="space-y-4">
             {users.length > 0 ? (

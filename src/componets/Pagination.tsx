@@ -1,5 +1,5 @@
 export const Pagination = ({
-                               totalPageCount, // Было totalPages, теперь число
+                               totalPageCount,
                                currentPage,
                                setCurrentPage,
                            }: {
@@ -7,7 +7,7 @@ export const Pagination = ({
     currentPage: number;
     setCurrentPage: (page: number) => void;
 }) => {
-    const pageNumbers = Array.from({length: totalPageCount}, (_, index) => index + 1);
+    const pageNumbers = Array.from({ length: totalPageCount }, (_, index) => index + 1);
 
     return (
         <div className="flex justify-center mt-6 space-x-2">
@@ -16,10 +16,10 @@ export const Pagination = ({
                     <button
                         key={pageNumber}
                         onClick={() => setCurrentPage(pageNumber)}
-                        className={`p-2 rounded-lg transition duration-200 ${
+                        className={`w-10 h-10 flex items-center justify-center rounded-full transition duration-200 hover: cursor-pointer ${
                             currentPage === pageNumber
                                 ? 'bg-blue-600 text-white'
-                                : 'bg-gray-300 text-gray-700 hover:bg-blue-500'
+                                : 'bg-gray-300 text-gray-700 hover:bg-blue-500 hover:text-white'
                         }`}
                     >
                         {pageNumber}
