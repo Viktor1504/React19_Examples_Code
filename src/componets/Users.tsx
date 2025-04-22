@@ -1,9 +1,23 @@
 import {UserCard} from "./UserCard.tsx";
 import {useAppSelector} from "../store/useAppSelector.ts";
+import {useAppDispatch} from "../store/useAppDispatch.ts";
+import {useEffect} from "react";
+import {fetchUsers} from "../store/usersSlice.ts";
 
 export const Users = () => {
+    const dispatch = useAppDispatch()
+    const currentPage = useAppSelector((state) => state.users.currentPage)
+    const users = useAppSelector((state) => state.users.users)
 
-    const users = useAppSelector((state) => state.users.users);
+    const removeUser = (id: string) => {
+        console.log(id)
+    }
+
+    useEffect(() => {
+        dispatch(fetchUsers({page: currentPage}))
+    }, [dispatch, currentPage])
+
+
     return (
         <div className="space-y-4">
             {users.length > 0 ? (

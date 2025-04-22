@@ -36,6 +36,6 @@ export const api = {
     },
 
     async createUser(user: User) {
-        await axiosInstance.post("/users", user);
+        return await axiosInstance.post("/users", user);
     },
 };

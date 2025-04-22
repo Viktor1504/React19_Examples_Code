@@ -1,19 +1,16 @@
-import {AxiosError} from "axios";
-import {api} from "../api/api.ts";
+import {useAppDispatch} from "../store/useAppDispatch.ts";
+import {addUser} from "../store/usersSlice.ts";
 
 export const AddUser = () => {
+    const dispatch = useAppDispatch()
+
     const actionHandler = async (formData: FormData): Promise<void> => {
         const name = formData.get('name') as string;
         const email = formData.get('email') as string;
 
-        const newUser = {id: crypto.randomUUID(), name, email};
+        const newUser = {id: crypto.randomUUID(), name, email}
 
-        try {
-            await api.createUser(newUser)
-        } catch (error) {
-            const axiosError = error as AxiosError | Error;
-            console.error("Error creating user:", axiosError);
-        }
+        dispatch(addUser(newUser))
     };
 
     return (
