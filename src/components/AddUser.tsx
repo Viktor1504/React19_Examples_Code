@@ -1,20 +1,21 @@
 import {useAppDispatch} from "../store/useAppDispatch.ts";
 import {addUser} from "../store/usersSlice.ts";
+import {FormEvent} from "react";
 
 export const AddUser = () => {
     const dispatch = useAppDispatch()
 
-    const actionHandler = async (formData: FormData): Promise<void> => {
-        const name = formData.get('name') as string;
-        const email = formData.get('email') as string;
-
+    const handleAddUser = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget)
+        const name = formData.get('name') as string
+        const email = formData.get('email') as string
         const newUser = {id: crypto.randomUUID(), name, email}
-
         dispatch(addUser(newUser))
-    };
+    }
 
     return (
-        <form action={actionHandler} className="flex items-center justify-between mb-4">
+        <form onSubmit={handleAddUser} className="flex items-center justify-between mb-4">
             <input
                 type="text"
                 name='name'

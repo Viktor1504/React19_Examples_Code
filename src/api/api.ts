@@ -31,11 +31,11 @@ export const api = {
         return response.data
     },
 
-    async deleteUser(id: string): Promise<AxiosResponse<void>> {
+    async deleteUser(id: string): Promise<AxiosResponse<{ id: string }>> {
         return await axiosInstance.delete(`/users/${id}`);
     },
 
-    async createUser(user: User) {
+    async createUser(user: User): Promise<AxiosResponse<User>> {
         return await axiosInstance.post("/users", user);
     },
 };

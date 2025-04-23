@@ -1,6 +1,6 @@
 import {Route, Routes} from "react-router";
 import App from "./App.tsx";
-import {UserPage} from "./componets/UserPage.tsx";
+import {UserPage} from "./components/UserPage.tsx";
 
 
 export const Routing = () => {

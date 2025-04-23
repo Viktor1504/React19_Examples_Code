@@ -1,24 +1,29 @@
-import {useParams} from "react-router";
+import {useNavigate, useParams} from "react-router";
 import {Suspense, use} from "react";
 import {api, User} from "../api/api.ts";
+import {deleteUser} from "../store/usersSlice.ts";
+import {useAppDispatch} from "../store/useAppDispatch.ts";
 
 export const UserPage = () => {
     const {id} = useParams() as { id: string };
 
-    const userPromise = api.getUser(id);
+    const userFetchPromise = api.getUser(id);
 
     return (
-        <Suspense fallback={<p>Loading...</p>}>
-            <UserDetails userPromise={userPromise}/>
+        <Suspense>
+            <UserDetails userPromise={userFetchPromise}/>
         </Suspense>
     )
 };
 
 const UserDetails = ({userPromise}: { userPromise: Promise<User> }) => {
-    const user = use(userPromise);
+    const dispatch = useAppDispatch()
+    const navigate = useNavigate()
+    const user = use(userPromise)
 
     const handleRemoveUser = (userId: string) => {
-        console.log(`Removing user with ID: ${userId}`);
+        dispatch(deleteUser(userId))
+        navigate("/")
     };
 
     return (

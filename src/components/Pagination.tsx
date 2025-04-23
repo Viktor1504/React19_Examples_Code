@@ -1,11 +1,12 @@
 import {useAppSelector} from "../store/useAppSelector.ts";
-import {setCurrentPage} from "../store/usersSlice.ts";
+import {selectCurrentPage, selectTotalPageCount, setCurrentPage} from "../store/usersSlice.ts";
 import {useAppDispatch} from "../store/useAppDispatch.ts";
 
 export const Pagination = () => {
     const dispatch = useAppDispatch()
 
-    const {currentPage, totalPageCount} = useAppSelector((state) => state.users)
+    const currentPage = useAppSelector(selectCurrentPage)
+    const totalPageCount = useAppSelector(selectTotalPageCount)
 
     const pageNumbers = Array.from({length: totalPageCount}, (_, index) => index + 1);
 

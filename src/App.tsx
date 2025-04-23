@@ -1,6 +1,6 @@
-import {AddUser} from './componets/AddUser.tsx';
-import {Users} from './componets/Users.tsx';
-import {Pagination} from './componets/Pagination.tsx';
+import {AddUser} from './components/AddUser.tsx';
+import {Users} from './components/Users.tsx';
+import {Pagination} from './components/Pagination.tsx';
 
 export default function App() {
     return (

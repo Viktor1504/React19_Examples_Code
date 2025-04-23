@@ -1,77 +1,7 @@
 {
   "users": [
     {
-      "id": "d2f06672-d773-4b83-a147-70fe24db056c",
-      "name": "Александр",
-      "email": "viktordenisevich6@gmail.com"
-    },
-    {
-      "id": "f4de6d48-1bb8-40c6-bc26-1e1126723065",
-      "name": "Viktor",
-      "email": "viktordenisevich6@gmail.com"
-    },
-    {
-      "id": "a9b6c4bd-1be1-48e9-a8aa-2828b18a00a4",
-      "name": "Viktor",
-      "email": "viktordenisevich6@gmail.com"
-    },
-    {
-      "id": "ea512a08-b44b-4c50-87b7-ad18b8d24f80",
-      "name": "Viktor",
-      "email": "viktordenisevich6@gmail.com"
-    },
-    {
-      "id": "f7ebe57c-5594-43b8-87f3-af40a410272e",
-      "name": "Viktor",
-      "email": "viktordenisevich6@gmail.com"
-    },
-    {
-      "id": "9e326ef3-dbe5-4581-8783-261af346e480",
-      "name": "Viktor",
-      "email": "viktordenisevich6@gmail.com"
-    },
-    {
-      "id": "feba46d9-329c-49e1-b05c-cf96b69a4838",
-      "name": "Viktor",
-      "email": "viktordenisevich6@gmail.com"
-    },
-    {
-      "id": "235ff716-3555-44db-95bf-02fdaedad230",
-      "name": "Viktor",
-      "email": "viktordenisevich6@gmail.com"
-    },
-    {
-      "id": "b96dadab-876f-45d9-8d38-599caad7c213",
-      "name": "Viktor",
-      "email": "viktordenisevich6@gmail.com"
-    },
-    {
-      "id": "bb090dec-63fa-4ecb-9d1d-fe8e34cd169e",
-      "name": "Viktor",
-      "email": "viktordenisevich6@gmail.com"
-    },
-    {
-      "id": "da598763-98eb-4f3d-ac18-3a26194c586a",
-      "name": "Viktor",
-      "email": "viktordenisevich6@gmail.com"
-    },
-    {
-      "id": "8aa7e309-82a6-4c90-92d5-7e24f2b917c1",
-      "name": "Viktor",
-      "email": "viktordenisevich6@gmail.com"
-    },
-    {
-      "id": "d1adac0e-8226-4bd2-ac45-becf57176b03",
-      "name": "Viktor",
-      "email": "viktordenisevich6@gmail.com"
-    },
-    {
-      "id": "d388656a-0e53-40af-95b7-d7ab48c8b724",
-      "name": "Viktor",
-      "email": "viktordenisevich6@gmail.com"
-    },
-    {
-      "id": "7e62787e-c351-477f-87ad-cc3422652342",
+      "id": "47b614d2-d5ee-4b9a-839c-b6b8977187c1",
       "name": "Viktor",
       "email": "viktordenisevich6@gmail.com"
     }

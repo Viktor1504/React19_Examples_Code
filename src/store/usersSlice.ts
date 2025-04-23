@@ -1,19 +1,19 @@
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {api, ApiResponse, User} from "../api/api.ts";
-import {AxiosError} from "axios";
-import {setError, setStatus} from "./appSlice.ts";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit"
+import {api, ApiResponse, User} from "../api/api.ts"
+import {AxiosError} from "axios"
+import {setError, setStatus} from "./appSlice.ts"
 
 type UsersState = {
-    users: User[];
-    currentPage: number;
-    totalPageCount: number;
+    users: User[]
+    currentPage: number
+    totalPageCount: number
 }
 
 const initialState: UsersState = {
     users: [],
     currentPage: 1,
     totalPageCount: 0,
-};
+}
 
 const USERS_PER_PAGE = 3
 
@@ -25,12 +25,12 @@ export const fetchUsers = createAsyncThunk(
             const response = await api.getUsers(page, USERS_PER_PAGE)
             dispatch(setTotalPageCount({totalPageCount: response.data.pages}))
             dispatch(setStatus("succeeded"));
-            return response.data;
+            return response.data
         } catch (error) {
             const axiosError = error as AxiosError
             dispatch(setError(axiosError.message))
-            dispatch(setStatus("failed"));
-            return rejectWithValue(axiosError.response?.data || "Failed to fetch users");
+            dispatch(setStatus("failed"))
+            return rejectWithValue(axiosError.response?.data || "Failed to fetch users")
         }
     }
 )
@@ -41,14 +41,30 @@ export const addUser = createAsyncThunk(
         try {
             dispatch(setStatus("loading"));
             const response = await api.createUser(user)
-            console.log(response)
             dispatch(setStatus("succeeded"));
-            return user
+            return response.data
         } catch (error) {
             const axiosError = error as AxiosError
             dispatch(setError(axiosError.message))
             dispatch(setStatus("failed"));
             return rejectWithValue(axiosError.response?.data || "Failed to add user");
+        }
+    }
+)
+
+export const deleteUser = createAsyncThunk(
+    "users/deleteUser",
+    async (id: string, {rejectWithValue, dispatch}) => {
+        try {
+            dispatch(setStatus("loading"));
+            const response = await api.deleteUser(id)
+            dispatch(setStatus("succeeded"))
+            return response.data.id
+        } catch (error) {
+            const axiosError = error as AxiosError
+            dispatch(setError(axiosError.message))
+            dispatch(setStatus("failed"));
+            return rejectWithValue(axiosError.response?.data || "Failed to delete user");
         }
     }
 )
@@ -70,7 +86,10 @@ export const usersSlice = createSlice({
                 state.users = action.payload.data;
             })
             .addCase(addUser.fulfilled, (state, action: PayloadAction<User>) => {
-                state.users.push(action.payload)
+                state.users.push(action.payload);
+            })
+            .addCase(deleteUser.fulfilled, (state, action: PayloadAction<string>) => {
+                state.users = state.users.filter(user => user.id !== action.payload)
             })
     },
     selectors: {

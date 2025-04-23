@@ -1,15 +1,15 @@
 import {User} from "../api/api.ts";
 import {NavLink} from "react-router"
-import {MouseEvent, startTransition} from "react"
+import {memo, MouseEvent} from "react"
+import {useAppDispatch} from "../store/useAppDispatch.ts";
+import {deleteUser} from "../store/usersSlice.ts";
 
-export const UserCard = ({user, onRemove}: { user: User; onRemove: (id: string) => void }) => {
-
+export const UserCard = memo(({user}: { user: User }) => {
+    const dispatch = useAppDispatch()
 
     const handleRemoveUser = (id: string, event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        startTransition(() => {
-            onRemove(id);
-        });
+        dispatch(deleteUser(id))
     }
     return (
         <NavLink
@@ -42,4 +42,4 @@ export const UserCard = ({user, onRemove}: { user: User; onRemove: (id: string) 
             </section>
         </NavLink>
     )
-}
+})
