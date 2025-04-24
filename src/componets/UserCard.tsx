@@ -1,7 +1,7 @@
 import {User} from "../api/api.ts";
 import {NavLink} from "react-router"
 
-export const UserCard = ({user, onRemove}: { user: User; onRemove: (id: string) => void }) => (
+export const UserCard = ({user}: { user: User}) => (
     <NavLink
         to={`/users/${user.id}`}
         className="no-underline"
@@ -23,7 +23,6 @@ export const UserCard = ({user, onRemove}: { user: User; onRemove: (id: string) 
             <button
                 onClick={(event) => {
                     event.preventDefault(); // Предотвращаем стандартное поведение ссылки
-                    onRemove(user.id);
                 }}
                 className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-200 cursor-pointer"
                 aria-label={`Remove ${user.name || "user"}`}

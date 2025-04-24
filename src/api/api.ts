@@ -1,41 +1,24 @@
-import axios, {AxiosResponse} from "axios";
-
 export type User = {
     id: string;
     name: string;
     email: string;
-};
-
-export type ApiResponse = {
-    first: number;
-    prev: number | null;
-    next: number | null;
-    last: number;
-    pages: number;
-    items: number;
-    data: User[];
-};
-
-const axiosInstance = axios.create({
-    baseURL: "http://localhost:3000"
-});
+}
 
 export const api = {
-    async getUsers(page: number, limit: number): Promise<AxiosResponse<ApiResponse>> {
-        return await axiosInstance.get<ApiResponse>("/users", {
-            params: {_page: page, _per_page: limit},
-        });
+
+    async getUsers() {
+        return await fetch('http://localhost:3001/users').then(res => res.json())
     },
+
     async getUser(id: string) {
-        const response = await axiosInstance.get<User>(`/users/${id}`)
-        return response.data
+        await fetch(`http://localhost:3001/users${id}`)
     },
-
-    async deleteUser(id: string): Promise<AxiosResponse<void>> {
-        return await axiosInstance.delete(`/users/${id}`);
-    },
-
     async createUser(user: User) {
-        await axiosInstance.post("/users", user);
+        await fetch(`http://localhost:3001/users`, {
+            method: 'POST', body: JSON.stringify(user)
+        })
     },
-};
+    async deleteUser(id: string) {
+        await fetch(`http://localhost:3001/users${id}`, {method: 'DELETE'})
+    },
+}

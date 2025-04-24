@@ -1,20 +1,20 @@
-import {AxiosError} from "axios";
 import {api} from "../api/api.ts";
+import {useTransition} from "react";
 
-export const AddUser = () => {
-    const actionHandler = async (formData: FormData): Promise<void> => {
+export const AddUser = ({refetchUsers}: { refetchUsers: () => void }) => {
+    const [isPending, startTransition] = useTransition()
+
+    const actionHandler = async (formData: FormData) => {
         const name = formData.get('name') as string;
         const email = formData.get('email') as string;
 
-        const newUser = {id: crypto.randomUUID(), name, email};
-
-        try {
-            await api.createUser(newUser)
-        } catch (error) {
-            const axiosError = error as AxiosError | Error;
-            console.error("Error creating user:", axiosError);
-        }
-    };
+        startTransition(async () => {
+            await api.createUser({id: crypto.randomUUID(), name, email})
+            startTransition(() => {
+                refetchUsers()
+            })
+        })
+    }
 
     return (
         <form action={actionHandler} className="flex items-center justify-between mb-4">
@@ -32,6 +32,7 @@ export const AddUser = () => {
             />
             <button
                 type="submit"
+                disabled={isPending}
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
             >
                 Add User
