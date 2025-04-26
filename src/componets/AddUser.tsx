@@ -22,12 +22,14 @@ export const AddUser = ({refetchUsers}: { refetchUsers: () => void }) => {
                 type="text"
                 name='name'
                 placeholder="Name"
+                disabled={isPending}
                 className="p-2 rounded-lg border border-gray-300"
             />
             <input
                 type="email"
                 name='email'
                 placeholder="Email"
+                disabled={isPending}
                 className="p-2 rounded-lg border border-gray-300"
             />
             <button

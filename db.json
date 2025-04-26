@@ -1,29 +1,18 @@
 {
   "users": [
     {
-      "id": "2f3264e0-0e30-47da-bdd7-79620979481e",
-      "name": "Виктор Денисевич",
-      "email": "viktordenisevich6@gmail.com",
-      "about": "i love play football"
-    },
-    {
-      "id": "7a136a43-2bb5-49ca-ae14-dc5ff098100c",
-      "name": "Виктор Денисевич",
+      "id": "ec44c04c-6bed-46f6-9348-eb7ed001ea50",
+      "name": "Эдуард",
       "email": "viktordenisevich6@gmail.com"
     },
     {
-      "id": "05d36c7d-425d-4faa-9732-632ed05f14c5",
-      "name": "Viktor",
+      "id": "a4e5ec0b-5768-41ac-945a-bbd20ab7ac14",
+      "name": "adf",
       "email": "viktordenisevich6@gmail.com"
     },
     {
-      "id": "7262fdd0-4089-41fe-8edc-39ce69568d97",
-      "name": "Viktor",
-      "email": "viktordenisevich6@gmail.com"
-    },
-    {
-      "id": "1e4e524f-581c-4711-9b38-460c6508c9ea",
-      "name": "Viktordasdasdasdasdfasdffasdf",
+      "id": "19969efd-a810-418d-93d1-2b720ba7bfac",
+      "name": "Эдуард",
       "email": "viktordenisevich6@gmail.com"
     }
   ]

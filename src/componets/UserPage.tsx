@@ -1,25 +1,18 @@
-import {useParams} from "react-router";
-import {Suspense, use} from "react";
+import {useNavigate, useParams} from "react-router";
 import {api, User} from "../api/api.ts";
+import {Suspense, use, useTransition} from "react";
 
-export const UserPage = () => {
-    const {id} = useParams() as { id: string };
-
-    const userPromise = api.getUser(id);
-
-    return (
-        <Suspense fallback={<p>Loading...</p>}>
-            <UserDetails userPromise={userPromise}/>
-        </Suspense>
-    )
-};
-
-const UserDetails = ({userPromise}: { userPromise: Promise<User> }) => {
+export const UserInfo = ({userPromise}: { userPromise: Promise<User> }) => {
     const user = use(userPromise);
+    const [isPending, startTransition] = useTransition()
+    const navigate = useNavigate()
 
     const handleRemoveUser = (userId: string) => {
-        console.log(`Removing user with ID: ${userId}`);
-    };
+        startTransition(async () => {
+            await api.deleteUser(userId)
+            navigate('/')
+        })
+    }
 
     return (
         <section className="max-w-2xl mx-auto p-6 bg-gray-50 rounded-lg shadow-xl">
@@ -34,11 +27,23 @@ const UserDetails = ({userPromise}: { userPromise: Promise<User> }) => {
             </div>
             <button
                 onClick={() => handleRemoveUser(user.id)}
+                disabled={isPending}
                 className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-200 cursor-pointer"
                 aria-label={`Remove ${user.name}`}
             >
                 Remove
             </button>
         </section>
+    );
+};
+
+export const UserPage = () => {
+    const {id} = useParams<{ id: string }>();
+    const userPromise = api.getUser(id!);
+
+    return (
+        <Suspense fallback={<p>Loading...</p>}>
+            <UserInfo userPromise={userPromise}/>
+        </Suspense>
     );
 };
