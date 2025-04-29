@@ -16,7 +16,8 @@ export const UserInfo = ({userPromise}: { userPromise: Promise<User> }) => {
 
     return (
         <section
-            className="max-w-2xl mx-auto p-6 bg-gray-50 rounded-lg shadow-md mb-4 flex justify-between items-center hover:bg-gray-100 transition duration-200"
+            className="max-w-2xl mx-auto p-6 bg-gray-50 rounded-lg shadow-md mb-4 flex justify-between items-center
+            hover:bg-gray-100 transition duration-200"
         >
             <div className="flex items-center">
                 <img
@@ -31,23 +32,29 @@ export const UserInfo = ({userPromise}: { userPromise: Promise<User> }) => {
             </div>
             <button
                 onClick={() => handleRemoveUser(user.id)}
-                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition duration-200 cursor-pointer"
+                className={`${
+                    isPending
+                        ? "bg-gray-400"
+                        : "bg-red-600 hover:bg-red-700"
+                } text-white px-4 py-2 rounded-lg transition duration-200 cursor-pointer`}
                 aria-label={`Remove ${user.name || "user"}`}
                 disabled={isPending}
             >
-                Remove
+                {isPending ? "Removing..." : "Remove"}
             </button>
         </section>
     );
 };
 
 export const UserPage = () => {
-    const {id} = useParams<{ id: string }>();
-    const userPromise = api.getUser(id!);
+    const {id} = useParams<{ id: string }>()
+    if (id) {
+        const userPromise = api.getUser(id)
 
-    return (
-        <Suspense fallback={<p>Loading...</p>}>
-            <UserInfo userPromise={userPromise}/>
-        </Suspense>
-    );
-};
+        return (
+            <Suspense fallback={<p className="text-center p-6">Загрузка данных пользователя...</p>}>
+                <UserInfo userPromise={userPromise}/>
+            </Suspense>
+        )
+    }
+}

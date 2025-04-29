@@ -13,7 +13,7 @@ export default function App() {
             <ErrorBoundary
                 onReset={() => {
                     // При сбросе ошибки также обновляем список пользователей
-                    refetchUsers();
+                    refetchUsers()
                 }}
                 fallbackRender={({error, resetErrorBoundary}: FallbackProps) => (
                     <div className={'text-red-600'}>

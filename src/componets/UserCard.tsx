@@ -40,7 +40,7 @@ export const UserCard = ({user, refetchUsers}: { user: User, refetchUsers: () =>
                     aria-label={`Remove ${user.name || "user"}`}
                     disabled={isPending}
                 >
-                    Remove
+                    {isPending ? 'Removing...' : 'Remove'}
                 </button>
             </section>
         </NavLink>
