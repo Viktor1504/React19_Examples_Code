@@ -2,6 +2,7 @@ import {api} from "../api/api.ts";
 import {useTransition} from "react";
 
 export const AddUser = ({refetchUsers}: { refetchUsers: () => void }) => {
+
     const [isPending, startTransition] = useTransition()
 
     const actionHandler = async (formData: FormData) => {
@@ -10,9 +11,7 @@ export const AddUser = ({refetchUsers}: { refetchUsers: () => void }) => {
 
         startTransition(async () => {
             await api.createUser({id: crypto.randomUUID(), name, email})
-            startTransition(() => {
-                refetchUsers()
-            })
+            refetchUsers()
         })
     }
 

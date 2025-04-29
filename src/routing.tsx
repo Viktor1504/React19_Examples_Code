@@ -9,6 +9,7 @@ export const Routing = () => {
         <Routes>
             <Route path="/" element={<App/>}/>
             <Route path={'/users/:id'} element={<UserPage/>}/>
+            <Route path={'*'} element={<div>Не существует</div>}/>
         </Routes>
     );
 };

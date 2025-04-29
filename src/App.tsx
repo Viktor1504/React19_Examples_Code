@@ -1,12 +1,11 @@
 import {AddUser} from './componets/AddUser.tsx';
-import {Suspense, useState} from "react";
+import {Suspense} from "react";
 import {UsersList} from "./componets/UsersList.tsx";
-import {api} from "./api/api.ts";
 import {ErrorBoundary, FallbackProps} from "react-error-boundary";
+import {useUsers} from "./hooks/useUsers.ts";
 
 export default function App() {
-    const [usersPromise, setUsersPromise] = useState(api.getUsers());
-    const refetchUsers = () => setUsersPromise(api.getUsers());
+    const {usersPromise, refetchUsers} = useUsers()
 
     return (
         <div className="max-w-2xl mx-auto p-6 bg-gray-50 rounded-lg shadow-xl">

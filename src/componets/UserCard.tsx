@@ -8,9 +8,7 @@ export const UserCard = ({user, refetchUsers}: { user: User, refetchUsers: () =>
     const handleRemoveUser = (userId: string) => {
         startTransition(async () => {
             await api.deleteUser(userId)
-            startTransition(() => {
-                refetchUsers()
-            })
+            refetchUsers()
         })
     }
 
