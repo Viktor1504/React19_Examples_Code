@@ -1,63 +1,50 @@
-import { ComponentType, MouseEvent } from 'react'
+import { useState } from 'react'
 
-// Определяем интерфейс для компонентов с onClick
-interface WithClickHandler {
-  onClick?: (event: MouseEvent<HTMLElement>) => void
+// Тип для возвращаемого значения хука
+type UseToggleReturn = {
+  isOn: boolean
+  toggle: () => void
 }
 
-// HOC для логирования событий
-const withLogger = <P extends WithClickHandler>(
-  Component: ComponentType<P>,
-) => {
-  return (props: P) => {
-    const handleClick = (event: MouseEvent<HTMLElement>) => {
-      console.log(`Клик по компоненту ${Component.name}`)
+// Кастомный хук
+const useToggle = (initialState: boolean = false): UseToggleReturn => {
+  const [isOn, setIsOn] = useState(initialState)
 
-      // Вызываем оригинальный обработчик, если он был передан
-      if (props.onClick) {
-        props.onClick(event)
-      }
-    }
+  const toggle = () => {
+    setIsOn((prev) => !prev)
+  }
 
-    // Рендерим оригинальный компонент с дополнительным обработчиком клика
-    return <Component {...props} onClick={handleClick} />
+  return {
+    isOn,
+    toggle,
   }
 }
 
-// Обычная кнопка с правильной типизацией
-const Button = ({
-  label,
-  onClick,
-}: {
-  label: string
-  onClick?: (event: MouseEvent<HTMLElement>) => void
-}) => {
-  return <button onClick={onClick}>{label}</button>
-}
-
-const LoggedButton = withLogger(Button)
-
-function App() {
-  const handleButtonClick = () => {
-    alert('Кнопка была нажата!')
-  }
+// Пример использования в компоненте
+function ToggleComponent() {
+  const { isOn, toggle } = useToggle()
 
   return (
-    <div>
-      <h1>Пример использования HOC</h1>
-
-      <h2>Обычная кнопка:</h2>
-      <Button label="Нажми меня" onClick={handleButtonClick} />
-
-      <h2>Кнопка с логированием:</h2>
-      <LoggedButton
-        label="Нажми меня с логированием"
-        onClick={handleButtonClick}
-      />
-
-      <p>Проверьте консоль разработчика, чтобы увидеть логи!</p>
+    <div className="flex flex-col items-center gap-4 p-6 bg-white rounded-lg shadow-md">
+      <p
+        className={`text-lg font-semibold ${isOn ? 'text-green-600' : 'text-red-600'}`}
+      >
+        Toggle is {isOn ? 'ON' : 'OFF'}
+      </p>
+      <button
+        className={`px-4 py-2 rounded-md text-white font-medium transition-colors ${
+          isOn
+            ? 'bg-red-500 hover:bg-red-600'
+            : 'bg-green-500 hover:bg-green-600'
+        }`}
+        onClick={toggle}
+      >
+        Toggle
+      </button>
     </div>
   )
 }
+
+const App = () => <ToggleComponent />
 
 export default App
