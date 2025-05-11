@@ -1,13 +1,16 @@
 import { Route, Routes } from 'react-router'
-import Info from './Info.tsx'
+import Users from './Users.tsx'
 import NotFound from './NotFound.tsx'
 import Home from './Home.tsx'
+import UserDetail from './UserDetail.tsx'
 
 const AppRoutes = () => {
   return (
     <Routes>
       <Route path={'/'} element={<Home />} />
-      <Route path={'/info'} element={<Info />} />
+      <Route path={'/users'} element={<Users />} />
+      <Route path={'/users/:id'} element={<UserDetail />} />
+      <Route path={'/not-found'} element={<NotFound />} />
       <Route path={'/*'} element={<NotFound />} />
     </Routes>
   )
