@@ -1,17 +1,17 @@
 import { Navigate, useNavigate, useParams } from 'react-router'
-import { use } from 'react'
-import API from './api.ts'
+import { Suspense, use } from 'react'
+import API, { User } from './api.ts'
+import { AxiosError, AxiosResponse } from 'axios'
+import { ErrorBoundary } from 'react-error-boundary'
 
-export const UserDetail = () => {
+const UsersDetail = ({
+  userPromise,
+}: {
+  userPromise: Promise<AxiosResponse<User>>
+}) => {
   const navigate = useNavigate()
-  const { id } = useParams<{ id: string }>()
 
-  if (!id) {
-    return <Navigate to={'/'} />
-  }
-
-  const response = use(API.getUser(id))
-  console.log(response)
+  const response = use(userPromise)
   const user = response.data
 
   return (
@@ -53,3 +53,27 @@ export const UserDetail = () => {
     )
   )
 }
+
+const UserPage = () => {
+  const { id } = useParams<{ id: string }>()
+  if (!id) {
+    return <Navigate to={'*'} />
+  }
+  const userPromise = API.getUser(id)
+  return (
+    <ErrorBoundary
+      fallbackRender={({ error }) => (
+        <div className={'text-red-600'}>
+          Something went wrong:{' '}
+          {error instanceof AxiosError ? error.message : 'Unknown error'}
+        </div>
+      )}
+    >
+      <Suspense fallback={<div>Loading...</div>}>
+        <UsersDetail userPromise={userPromise} />
+      </Suspense>
+    </ErrorBoundary>
+  )
+}
+
+export default UserPage

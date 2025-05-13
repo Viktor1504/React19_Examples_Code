@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router'
 import MainPage from './MainPage.tsx'
 import NotFound from './NotFound.tsx'
 import UsersPage from './UsersPage.tsx'
-import { UserDetail } from './UserDetail.tsx'
+import UserPage from './UserPage.tsx'
 
 const router = createBrowserRouter([
   {
@@ -18,7 +18,7 @@ const router = createBrowserRouter([
       },
       {
         path: ':id',
-        Component: UserDetail,
+        Component: UserPage,
       },
     ],
   },
