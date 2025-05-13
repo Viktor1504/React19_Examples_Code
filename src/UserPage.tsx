@@ -4,7 +4,7 @@ import API, { User } from './api.ts'
 import { AxiosError, AxiosResponse } from 'axios'
 import { ErrorBoundary } from 'react-error-boundary'
 
-const UsersDetail = ({
+const UserDetail = ({
   userPromise,
 }: {
   userPromise: Promise<AxiosResponse<User>>
@@ -70,7 +70,7 @@ const UserPage = () => {
       )}
     >
       <Suspense fallback={<div>Loading...</div>}>
-        <UsersDetail userPromise={userPromise} />
+        <UserDetail userPromise={userPromise} />
       </Suspense>
     </ErrorBoundary>
   )

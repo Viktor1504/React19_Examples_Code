@@ -1,22 +1,17 @@
 {
   "users": [
     {
-      "id": "1",
-      "name": "John",
-      "age": 12
+      "id": "4",
+      "name": "Victor",
+      "age": 30
     },
     {
       "id": "2",
-      "name": "Jane",
-      "age": 15
+      "name": "Victor",
+      "age": 30
     },
     {
-      "id": "3",
-      "name": "Pavel",
-      "age": 25
-    },
-    {
-      "id": "4",
+      "id": "322",
       "name": "Victor",
       "age": 30
     }
