@@ -2,7 +2,7 @@ import { Navigate, useNavigate, useParams } from 'react-router'
 import { use } from 'react'
 import API from './api.ts'
 
-const UserDetail = () => {
+export const UserDetail = () => {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
 
@@ -53,5 +53,3 @@ const UserDetail = () => {
     )
   )
 }
-
-export default UserDetail
