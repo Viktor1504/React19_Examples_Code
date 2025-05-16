@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from 'axios'
 export type User = {
   id: string
   name: string
-  age: number
+  age: string
 }
 
 const instance = axios.create({
@@ -11,7 +11,7 @@ const instance = axios.create({
 })
 
 const API = {
-  async getUsers(): Promise<AxiosResponse<User[]>> {
+  async fetchUsers(): Promise<AxiosResponse<User[]>> {
     return instance.get('users')
   },
   getUser(id: string): Promise<AxiosResponse<User>> {
@@ -20,7 +20,7 @@ const API = {
   deleteUser(id: string) {
     return instance.delete(`users/${id}`)
   },
-  createUser(user: User) {
+  addUser(user: User) {
     return instance.post('users', user)
   },
 }

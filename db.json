@@ -1,19 +1,14 @@
 {
   "users": [
     {
-      "id": "4",
-      "name": "Victor",
-      "age": 30
+      "id": "2f2caca2-84a9-44bc-a272-224b97862d7a",
+      "name": "Viktor",
+      "age": "22"
     },
     {
-      "id": "2",
-      "name": "Victor",
-      "age": 30
-    },
-    {
-      "id": "322",
-      "name": "Victor",
-      "age": 30
+      "id": "f72ed8f6-1543-47e7-ae35-79f4391146ac",
+      "name": "Viktor",
+      "age": "2"
     }
   ]
 }

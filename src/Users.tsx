@@ -6,16 +6,19 @@ import { MouseEvent } from 'react'
 
 const Users = ({
   usersPromise,
+  refetchUsers,
 }: {
   usersPromise: Promise<AxiosResponse<User[]>>
+  refetchUsers: () => void
 }) => {
   const navigate = useNavigate()
   const response = use(usersPromise)
   const users = response.data
 
   const handleDelete = async (id: string, e: MouseEvent) => {
-    e.preventDefault()
+    e.stopPropagation()
     await API.deleteUser(id)
+    refetchUsers()
   }
 
   return (
@@ -49,7 +52,7 @@ const Users = ({
             <div className="mt-4">
               <button
                 onClick={(e) => handleDelete(user.id, e)}
-                className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-red-600 transition-colors duration-200"
+                className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-red-600 transition-colors duration-200 cursor-no-drop"
               >
                 Удалить
               </button>

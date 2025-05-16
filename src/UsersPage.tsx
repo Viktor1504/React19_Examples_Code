@@ -1,12 +1,15 @@
 import { useNavigate } from 'react-router'
 import Users from './Users.tsx'
-import { Suspense, useState } from 'react'
+import { startTransition, Suspense, useState } from 'react'
 import API from './api.ts'
 import { ErrorBoundary } from 'react-error-boundary'
 import { AxiosError } from 'axios'
+import AddUserPage from './AddUserPage.tsx'
 
 const UsersPage = () => {
-  const [usersPromise] = useState(API.getUsers())
+  const [usersPromise, setUsersPromise] = useState(API.fetchUsers())
+  const refetchUsers = () =>
+    startTransition(() => setUsersPromise(API.fetchUsers()))
   const navigate = useNavigate()
 
   return (
@@ -14,6 +17,7 @@ const UsersPage = () => {
       <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
         Список пользователей
       </h1>
+      <AddUserPage refetchUsers={refetchUsers} />
       <ErrorBoundary
         fallbackRender={({ error }) => (
           <div className={'text-red-600'}>
@@ -23,7 +27,7 @@ const UsersPage = () => {
         )}
       >
         <Suspense fallback={<div>Loading...</div>}>
-          <Users usersPromise={usersPromise} />
+          <Users usersPromise={usersPromise} refetchUsers={refetchUsers} />
         </Suspense>
       </ErrorBoundary>
       <div className="flex justify-center">
