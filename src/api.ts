@@ -23,6 +23,9 @@ const API = {
   addUser(user: User) {
     return instance.post('users', user)
   },
+  updateUser(user: User) {
+    return instance.put(`users/${user.id}`, user)
+  },
 }
 
 export default API
