@@ -6,11 +6,17 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { AxiosError } from 'axios'
 import AddUserPage from './AddUserPage.tsx'
 
+const defaultFetchUsers = API.fetchUsers()
+
 const UsersPage = () => {
-  const [usersPromise, setUsersPromise] = useState(API.fetchUsers())
+  const [usersPromise, setUsersPromise] = useState(defaultFetchUsers)
   const refetchUsers = () =>
     startTransition(() => setUsersPromise(API.fetchUsers()))
   const navigate = useNavigate()
+
+  const handleSearch = (value: string) => {
+    startTransition(() => setUsersPromise(API.searchUsers(value)))
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gray-50 rounded-lg shadow-lg">
@@ -18,6 +24,14 @@ const UsersPage = () => {
         Список пользователей
       </h1>
       <AddUserPage refetchUsers={refetchUsers} />
+      <input
+        type="text"
+        name="search"
+        placeholder="Поиск"
+        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+        onChange={(e) => handleSearch(e.currentTarget.value)}
+      />
+
       <ErrorBoundary
         fallbackRender={({ error }) => (
           <div className={'text-red-600'}>

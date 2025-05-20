@@ -26,6 +26,9 @@ const API = {
   updateUser(user: User) {
     return instance.put(`users/${user.id}`, user)
   },
+  searchUsers(name: string): Promise<AxiosResponse<User[]>> {
+    return instance.get(`users?name_like=${name}`)
+  },
 }
 
 export default API
