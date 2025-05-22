@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router'
 import { MouseEvent, use } from 'react'
 import API, { User } from './api.ts'
-import { AxiosResponse } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 
 const Users = ({
   usersPromise,
@@ -15,8 +15,13 @@ const Users = ({
 
   const handleDelete = async (id: string, e: MouseEvent) => {
     e.stopPropagation()
-    await API.deleteUser(id)
-    refetchUsers()
+    try {
+      await API.deleteUser(id)
+      refetchUsers()
+    } catch (error) {
+      const err = error as AxiosError | Error
+      alert('Не удалось удалить пользователя ' + err.message)
+    }
   }
 
   return (

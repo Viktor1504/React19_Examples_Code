@@ -1,5 +1,5 @@
 import { Navigate, useNavigate, useParams } from 'react-router'
-import { Suspense, MouseEvent, use, useState } from 'react'
+import { MouseEvent, Suspense, use, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import API, { User } from './api.ts'
 import { AxiosError, AxiosResponse } from 'axios'
@@ -12,8 +12,8 @@ const UserDetail = ({
   const navigate = useNavigate()
   const { data: user } = use(userPromise)
   const [isEditing, setIsEditing] = useState(false)
-  const [name, setName] = useState<string>(user.name)
-  const [age, setAge] = useState<string>(user.age)
+  const [name, setName] = useState(user.name)
+  const [age, setAge] = useState(user.age)
 
   const handleDelete = async (id: string, e: MouseEvent) => {
     e.stopPropagation()
@@ -26,15 +26,18 @@ const UserDetail = ({
     }
   }
 
-  const handleEdit = async () => {
+  const handleAction = async (formData: FormData) => {
+    const name = formData.get('name') as string
+    const age = formData.get('age') as string
+
     try {
+      await API.updateUser({ ...user, name, age })
+      setName(name)
+      setAge(age)
       setIsEditing(false)
-      const newUser = { ...user, name, age }
-      await API.updateUser(newUser)
     } catch (error) {
       const err = error as AxiosError | Error
       alert('Не удалось обновить пользователя ' + err.message)
-      setIsEditing(true)
     }
   }
 
@@ -49,18 +52,19 @@ const UserDetail = ({
           </h1>
         </div>
 
-        <div className="p-8">
+        <form action={handleAction} className="p-8">
           <div className="flex items-center mb-8">
             <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center text-blue-600 font-bold text-2xl shadow-md border-2 border-blue-100">
-              {name.charAt(0)}
+              {user.name.charAt(0)}
             </div>
-            <div className="ml-6">
+            <div className="ml-6 flex-1">
               {isEditing ? (
                 <input
-                  className="text-3xl font-bold text-gray-800 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full"
-                  value={name}
+                  name="name"
+                  defaultValue={name}
+                  className="text-3xl font-bold text-gray-800 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
+                  required
                   autoFocus
-                  onChange={(e) => setName(e.currentTarget.value)}
                 />
               ) : (
                 <h2 className="text-3xl font-bold text-gray-800">{name}</h2>
@@ -72,54 +76,68 @@ const UserDetail = ({
           </div>
 
           <div className="bg-gray-50 rounded-lg p-6 mb-8">
-            <div className="flex items-center mb-2">
-              <div className="w-2 h-2 rounded-full bg-blue-500 mr-2"></div>
-              <span className="text-gray-500 text-lg">Возраст:</span>
-            </div>
+            <label className="text-gray-500 text-lg block mb-2">Возраст:</label>
             {isEditing ? (
               <input
-                className="text-gray-800 text-xl font-medium pl-4 rounded-lg border border-gray-300 p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                name="age"
                 type="number"
-                value={age}
-                onChange={(e) => setAge(e.currentTarget.value)}
+                defaultValue={age}
+                className="text-gray-800 text-xl font-medium rounded-lg border border-gray-300 p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+                min="0"
+                max="150"
               />
             ) : (
-              <p className="text-gray-800 text-xl font-medium pl-4">{age}</p>
+              <span className="text-gray-800 text-xl font-medium">{age}</span>
             )}
           </div>
 
-          <div className="flex justify-between mt-8">
+          <div className="flex justify-between">
             <button
+              type="button"
               onClick={(e) => handleDelete(user.id, e)}
-              className="bg-red-50 text-red-500 border border-red-200 px-6 py-3 rounded-lg font-medium hover:bg-red-500 hover:text-white hover:border-red-500 transition-all duration-300"
+              className="bg-red-50 text-red-500 border border-red-200 px-6 py-3 rounded-lg hover:bg-red-500 hover:text-white transition-all"
             >
               Удалить
             </button>
 
-            {isEditing ? (
-              <button
-                onClick={handleEdit}
-                className="bg-green-50 text-green-500 border border-green-200 px-6 py-3 rounded-lg font-medium hover:bg-green-500 hover:text-white hover:border-green-500 transition-all duration-300"
-              >
-                Сохранить
-              </button>
-            ) : (
-              <button
-                onClick={() => setIsEditing(true)}
-                className="bg-amber-50 text-amber-500 border border-amber-200 px-6 py-3 rounded-lg font-medium hover:bg-amber-500 hover:text-white hover:border-amber-500 transition-all duration-300"
-              >
-                Редактировать
-              </button>
-            )}
+            <div className="space-x-4">
+              {isEditing ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setIsEditing(false)}
+                    className="bg-gray-50 text-gray-500 border border-gray-200 px-6 py-3 rounded-lg hover:bg-gray-500 hover:text-white transition-all"
+                  >
+                    Отмена
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-green-50 text-green-500 border border-green-200 px-6 py-3 rounded-lg hover:bg-green-500 hover:text-white transition-all"
+                  >
+                    Сохранить
+                  </button>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setIsEditing(true)}
+                  className="bg-amber-50 text-amber-500 border border-amber-200 px-6 py-3 rounded-lg hover:bg-amber-500 hover:text-white transition-all"
+                >
+                  Редактировать
+                </button>
+              )}
+            </div>
 
             <button
-              onClick={() => navigate('/users/')}
-              className="bg-blue-50 text-blue-500 border border-blue-200 px-6 py-3 rounded-lg font-medium hover:bg-blue-500 hover:text-white hover:border-blue-500 transition-all duration-300"
+              type="button"
+              onClick={() => navigate('/users')}
+              className="bg-blue-50 text-blue-500 border border-blue-200 px-6 py-3 rounded-lg hover:bg-blue-500 hover:text-white transition-all"
             >
-              К списку пользователей
+              К списку
             </button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   )
@@ -134,20 +152,13 @@ const UserPage = () => {
   return (
     <ErrorBoundary
       fallbackRender={({ error }) => (
-        <div className="max-w-3xl mx-auto mt-8 p-4 bg-red-50 text-red-600 rounded-lg border border-red-200">
-          Что-то пошло не так:{' '}
+        <div className="max-w-3xl mx-auto mt-8 p-4 bg-red-50 text-red-600 rounded-lg">
+          Ошибка:{' '}
           {error instanceof AxiosError ? error.message : 'Неизвестная ошибка'}
         </div>
       )}
     >
-      <Suspense
-        fallback={
-          <div className="max-w-3xl mx-auto mt-8 p-6 bg-white rounded-lg shadow text-center">
-            <div className="inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-            <p className="mt-4 text-gray-600">Загрузка...</p>
-          </div>
-        }
-      >
+      <Suspense fallback={<div className="text-center mt-8">Загрузка...</div>}>
         <UserDetail userPromise={userPromise} />
       </Suspense>
     </ErrorBoundary>

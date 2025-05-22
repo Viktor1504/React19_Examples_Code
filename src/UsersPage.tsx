@@ -6,12 +6,11 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { AxiosError } from 'axios'
 import AddUserPage from './AddUserPage.tsx'
 
-const defaultFetchUsers = API.fetchUsers()
-
 const UsersPage = () => {
-  const [usersPromise, setUsersPromise] = useState(defaultFetchUsers)
+  const [usersPromise, setUsersPromise] = useState(API.fetchUsers())
   const refetchUsers = () =>
     startTransition(() => setUsersPromise(API.fetchUsers()))
+
   const navigate = useNavigate()
 
   const handleSearch = (value: string) => {

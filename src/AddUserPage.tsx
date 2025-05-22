@@ -1,4 +1,5 @@
 import API from './api.ts'
+import { AxiosError } from 'axios'
 
 const AddUserPage = ({ refetchUsers }: { refetchUsers: () => void }) => {
   const handleAction = async (formData: FormData) => {
@@ -6,8 +7,13 @@ const AddUserPage = ({ refetchUsers }: { refetchUsers: () => void }) => {
     const age = formData.get('age') as string
 
     if (name && age) {
-      await API.addUser({ id: crypto.randomUUID(), name, age })
-      refetchUsers()
+      try {
+        await API.addUser({ id: crypto.randomUUID(), name, age })
+        refetchUsers()
+      } catch (error) {
+        const err = error as AxiosError | Error
+        alert('Не удалось добавить пользователя ' + err.message)
+      }
     }
   }
 
