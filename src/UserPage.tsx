@@ -3,6 +3,7 @@ import { MouseEvent, Suspense, use, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import API, { User } from './api.ts'
 import { AxiosError, AxiosResponse } from 'axios'
+import NotFound from './NotFound.tsx'
 
 const UserDetail = ({
   userPromise,
@@ -155,19 +156,14 @@ const UserDetail = ({
 
 const UserPage = () => {
   const { id } = useParams<{ id?: string }>()
+  const params = useParams()
+  console.log(params['*'])
   if (!id) return <Navigate to={'*'} />
 
   const userPromise = API.getUser(id)
 
   return (
-    <ErrorBoundary
-      fallbackRender={({ error }) => (
-        <div className="max-w-3xl mx-auto mt-8 p-4 bg-red-50 text-red-600 rounded-lg">
-          Ошибка:{' '}
-          {error instanceof AxiosError ? error.message : 'Неизвестная ошибка'}
-        </div>
-      )}
-    >
+    <ErrorBoundary fallbackRender={({ error }) => <NotFound error={error} />}>
       <Suspense fallback={<div className="text-center mt-8">Загрузка...</div>}>
         <UserDetail userPromise={userPromise} />
       </Suspense>

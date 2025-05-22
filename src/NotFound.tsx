@@ -1,20 +1,19 @@
 import { useNavigate } from 'react-router'
+import { AxiosError } from 'axios'
 
-const NotFound = () => {
+const NotFound = ({ error }: { error: AxiosError | Error }) => {
   const navigate = useNavigate()
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gray-50 rounded-lg shadow-lg flex flex-col items-center justify-center min-h-[50vh]">
       <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-        404 - Страница не найдена
+        {error ? error.name : 'Unknown error'}
       </h1>
-
-      <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-200 w-full mb-8 text-center">
-        <p className="text-lg text-gray-600">
-          Извините, запрашиваемая страница не существует.
-        </p>
-      </div>
-
+      {error && (
+        <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-200 w-full mb-8 text-center">
+          <p className="text-lg text-gray-600">{error.message}</p>
+        </div>
+      )}
       <div className="flex justify-center">
         <button
           onClick={() => navigate(-1)}
