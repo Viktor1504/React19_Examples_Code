@@ -67,7 +67,12 @@ const UserDetail = ({
                   autoFocus
                 />
               ) : (
-                <h2 className="text-3xl font-bold text-gray-800">{name}</h2>
+                <h2
+                  className="text-3xl font-bold text-gray-800 cursor-pointer"
+                  onDoubleClick={() => setIsEditing(true)}
+                >
+                  {name}
+                </h2>
               )}
               <p className="text-blue-500 text-sm mt-1">
                 ID: {user.id.substring(0, 8)}...
@@ -88,7 +93,12 @@ const UserDetail = ({
                 max="150"
               />
             ) : (
-              <span className="text-gray-800 text-xl font-medium">{age}</span>
+              <span
+                className="text-gray-800 text-xl font-medium cursor-pointer"
+                onDoubleClick={() => setIsEditing(true)}
+              >
+                {age}
+              </span>
             )}
           </div>
 
