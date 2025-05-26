@@ -5,6 +5,7 @@ import API from './api.ts'
 import { ErrorBoundary } from 'react-error-boundary'
 import { AxiosError } from 'axios'
 import AddUserPage from './AddUserPage.tsx'
+import InputSearch from './InputSearch.tsx'
 
 const UsersPage = () => {
   const [usersPromise, setUsersPromise] = useState(API.fetchUsers())
@@ -23,13 +24,7 @@ const UsersPage = () => {
         Список пользователей
       </h1>
       <AddUserPage refetchUsers={refetchUsers} />
-      <input
-        type="text"
-        name="search"
-        placeholder="Поиск"
-        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
-        onChange={(e) => handleSearch(e.currentTarget.value)}
-      />
+      <InputSearch handleSearch={handleSearch} />
 
       <ErrorBoundary
         fallbackRender={({ error }) => (

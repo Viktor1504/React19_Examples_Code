@@ -156,8 +156,6 @@ const UserDetail = ({
 
 const UserPage = () => {
   const { id } = useParams<{ id?: string }>()
-  const params = useParams()
-  console.log(params['*'])
   if (!id) return <Navigate to={'*'} />
 
   const userPromise = API.getUser(id)

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router'
 import { AxiosError } from 'axios'
 
-const NotFound = ({ error }: { error: AxiosError | Error }) => {
+const NotFound = ({ error }: { error?: AxiosError | Error }) => {
   const navigate = useNavigate()
 
   return (
