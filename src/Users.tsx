@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 import { MouseEvent, use } from 'react'
 import API, { User } from './api.ts'
 import { AxiosError, AxiosResponse } from 'axios'
@@ -12,6 +12,10 @@ const Users = ({
   refetchUsers: () => void
   searchParams: URLSearchParams
 }) => {
+  const locale = useLocation()
+
+  console.log(locale) // Выводим информацию о местоположении
+
   const value = searchParams.get('criteria')?.toLowerCase()
 
   const navigate = useNavigate()
