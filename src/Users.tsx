@@ -6,12 +6,22 @@ import { AxiosError, AxiosResponse } from 'axios'
 const Users = ({
   usersPromise,
   refetchUsers,
+  searchParams,
 }: {
   usersPromise: Promise<AxiosResponse<User[]>>
   refetchUsers: () => void
+  searchParams: URLSearchParams
 }) => {
+  const value = searchParams.get('criteria')?.toLowerCase()
+
   const navigate = useNavigate()
   const { data: users } = use(usersPromise)
+
+  const filteredUsers = users?.filter(
+    (user) =>
+      user.name.toLowerCase().includes(value || '') ||
+      user.age.includes(value || ''),
+  )
 
   const handleDelete = async (id: string, e: MouseEvent) => {
     e.stopPropagation()
@@ -27,8 +37,8 @@ const Users = ({
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {users &&
-          users.map((user) => (
+        {filteredUsers &&
+          filteredUsers.map((user) => (
             <div
               key={user.id}
               className="transform transition-all duration-300 hover:scale-102 hover:-translate-y-1"

@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router'
+import { useNavigate, useSearchParams } from 'react-router'
 import Users from './Users.tsx'
 import { startTransition, Suspense, useState } from 'react'
 import API from './api.ts'
@@ -8,15 +8,12 @@ import AddUserPage from './AddUserPage.tsx'
 import InputSearch from './InputSearch.tsx'
 
 const UsersPage = () => {
+  const navigate = useNavigate()
   const [usersPromise, setUsersPromise] = useState(API.fetchUsers())
+  const [searchParams, setSearchParams] = useSearchParams('')
+
   const refetchUsers = () =>
     startTransition(() => setUsersPromise(API.fetchUsers()))
-
-  const navigate = useNavigate()
-
-  const handleSearch = (value: string) => {
-    startTransition(() => setUsersPromise(API.searchUsers(value)))
-  }
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gray-50 rounded-lg shadow-lg">
@@ -24,7 +21,10 @@ const UsersPage = () => {
         Список пользователей
       </h1>
       <AddUserPage refetchUsers={refetchUsers} />
-      <InputSearch handleSearch={handleSearch} />
+      <InputSearch
+        setSearchParams={setSearchParams}
+        searchParams={searchParams}
+      />
 
       <ErrorBoundary
         fallbackRender={({ error }) => (
@@ -35,7 +35,11 @@ const UsersPage = () => {
         )}
       >
         <Suspense fallback={<div>Loading...</div>}>
-          <Users usersPromise={usersPromise} refetchUsers={refetchUsers} />
+          <Users
+            usersPromise={usersPromise}
+            refetchUsers={refetchUsers}
+            searchParams={searchParams}
+          />
         </Suspense>
       </ErrorBoundary>
       <div className="flex justify-center">
