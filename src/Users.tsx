@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 import { MouseEvent, use } from 'react'
 import API, { User } from './api.ts'
 import { AxiosError, AxiosResponse } from 'axios'
@@ -12,9 +12,9 @@ const Users = ({
   refetchUsers: () => void
   searchParams: URLSearchParams
 }) => {
-  const locale = useLocation()
-
-  console.log(locale) // Выводим информацию о местоположении
+  // const locale = useLocation()
+  //
+  // console.log(locale) // Выводим информацию о местоположении
 
   const value = searchParams.get('criteria')?.toLowerCase()
 
@@ -48,7 +48,7 @@ const Users = ({
               className="transform transition-all duration-300 hover:scale-102 hover:-translate-y-1"
             >
               <div
-                onClick={() => navigate(`/users/${user.id}`)}
+                onClick={() => navigate(`/users/${user.id}`, { state: user })}
                 className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100"
               >
                 <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-4">

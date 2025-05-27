@@ -1,5 +1,18 @@
-import { Navigate, useNavigate, useParams } from 'react-router'
-import { MouseEvent, Suspense, use, useState } from 'react'
+import {
+  BlockerFunction,
+  Navigate,
+  useBlocker,
+  useNavigate,
+  useParams,
+} from 'react-router'
+import {
+  MouseEvent,
+  Suspense,
+  use,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import API, { User } from './api.ts'
 import { AxiosError, AxiosResponse } from 'axios'
@@ -16,31 +29,67 @@ const UserDetail = ({
   const [name, setName] = useState(user.name)
   const [age, setAge] = useState(user.age)
 
-  const handleDelete = async (id: string, e: MouseEvent) => {
-    e.stopPropagation()
-    try {
-      await API.deleteUser(id)
-      navigate('/users')
-    } catch (error) {
-      const err = error as AxiosError | Error
-      alert('Не удалось удалить пользователя ' + err.message)
-    }
-  }
+  // const locale = useLocation()
+  // console.log(locale)
 
-  const handleAction = async (formData: FormData) => {
-    const name = formData.get('name') as string
-    const age = formData.get('age') as string
+  // Проверка несохраненных изменений
+  const shouldBlock = useCallback<BlockerFunction>(
+    ({ currentLocation, nextLocation }) =>
+      (name !== user.name || age !== user.age) &&
+      currentLocation.pathname !== nextLocation.pathname,
+    [name, user.name, age, user.age],
+  )
 
-    try {
-      await API.updateUser({ ...user, name, age })
-      setName(name)
-      setAge(age)
-      setIsEditing(false)
-    } catch (error) {
-      const err = error as AxiosError | Error
-      alert('Не удалось обновить пользователя ' + err.message)
+  const blocker = useBlocker(isEditing ? shouldBlock : () => false)
+
+  // Обработчик для навигации к списку пользователей
+  const handleNavigateToUsers = useCallback(() => {
+    if (blocker.state === 'blocked') {
+      return // Ждем решения пользователя через модальный диалог
     }
-  }
+    navigate('/users')
+  }, [blocker.state, navigate])
+
+  const handleDelete = useCallback(
+    async (id: string, e: MouseEvent) => {
+      e.stopPropagation()
+      if (blocker.state === 'blocked') {
+        return // Ждем решения пользователя через модальный диалог
+      }
+      try {
+        await API.deleteUser(id)
+        navigate('/users')
+      } catch (error) {
+        const err = error as AxiosError | Error
+        alert('Не удалось удалить пользователя ' + err.message)
+      }
+    },
+    [blocker.state, navigate],
+  )
+
+  const handleAction = useCallback(
+    async (formData: FormData) => {
+      const name = formData.get('name') as string
+      const age = formData.get('age') as string
+
+      try {
+        await API.updateUser({ ...user, name, age })
+        setName(name)
+        setAge(age)
+        setIsEditing(false)
+      } catch (error) {
+        const err = error as AxiosError | Error
+        alert('Не удалось обновить пользователя ' + err.message)
+      }
+    },
+    [user],
+  )
+
+  const handleCancel = useCallback(() => {
+    setName(user.name)
+    setAge(user.age)
+    setIsEditing(false)
+  }, [user.name, user.age])
 
   if (!user) return null
 
@@ -62,7 +111,8 @@ const UserDetail = ({
               {isEditing ? (
                 <input
                   name="name"
-                  defaultValue={name}
+                  value={name}
+                  onChange={(e) => setName(e.currentTarget.value)}
                   className="text-3xl font-bold text-gray-800 border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
                   required
                   autoFocus
@@ -87,7 +137,8 @@ const UserDetail = ({
               <input
                 name="age"
                 type="number"
-                defaultValue={age}
+                value={age}
+                onChange={(e) => setAge(e.currentTarget.value)}
                 className="text-gray-800 text-xl font-medium rounded-lg border border-gray-300 p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
                 min="0"
@@ -117,7 +168,7 @@ const UserDetail = ({
                 <>
                   <button
                     type="button"
-                    onClick={() => setIsEditing(false)}
+                    onClick={handleCancel}
                     className="bg-gray-50 text-gray-500 border border-gray-200 px-6 py-3 rounded-lg hover:bg-gray-500 hover:text-white transition-all"
                   >
                     Отмена
@@ -142,7 +193,7 @@ const UserDetail = ({
 
             <button
               type="button"
-              onClick={() => navigate('/users')}
+              onClick={handleNavigateToUsers}
               className="bg-blue-50 text-blue-500 border border-blue-200 px-6 py-3 rounded-lg hover:bg-blue-500 hover:text-white transition-all"
             >
               К списку
@@ -150,15 +201,44 @@ const UserDetail = ({
           </div>
         </form>
       </div>
+      {/* Модальный диалог для блокировки навигации */}
+      {blocker.state === 'blocked' && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 max-w-sm w-full shadow-lg">
+            <h3 className="text-lg font-bold mb-4">Несохраненные изменения</h3>
+            <p className="text-gray-600 mb-6">
+              У вас есть несохраненные изменения. Вы уверены, что хотите
+              покинуть страницу?
+            </p>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={() => blocker.reset()}
+                className="bg-gray-50 text-gray-500 border border-gray-200 px-4 py-2 rounded-lg hover:bg-gray-500 hover:text-white transition-all"
+              >
+                Остаться
+              </button>
+              <button
+                onClick={() => blocker.proceed()}
+                className="bg-blue-50 text-blue-500 border border-blue-200 px-4 py-2 rounded-lg hover:bg-blue-500 hover:text-white transition-all"
+              >
+                Покинуть
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
 
 const UserPage = () => {
   const { id } = useParams<{ id?: string }>()
-  if (!id) return <Navigate to={'*'} />
+  const userPromise = useMemo(() => {
+    if (!id) return
+    return API.getUser(id)
+  }, [id])
 
-  const userPromise = API.getUser(id)
+  if (!id || !userPromise) return <Navigate to={'*'} />
 
   return (
     <ErrorBoundary fallbackRender={({ error }) => <NotFound error={error} />}>
@@ -168,5 +248,4 @@ const UserPage = () => {
     </ErrorBoundary>
   )
 }
-
 export default UserPage
