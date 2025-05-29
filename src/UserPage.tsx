@@ -1,6 +1,7 @@
 import {
   BlockerFunction,
   Navigate,
+  useBeforeUnload,
   useBlocker,
   useNavigate,
   useParams,
@@ -28,6 +29,17 @@ const UserDetail = ({
   const [isEditing, setIsEditing] = useState(false)
   const [name, setName] = useState(user.name)
   const [age, setAge] = useState(user.age)
+
+  useBeforeUnload(
+    useCallback(
+      (e) => {
+        if (isEditing) {
+          e.preventDefault()
+        }
+      },
+      [isEditing],
+    ),
+  )
 
   // const locale = useLocation()
   // console.log(locale)
@@ -233,6 +245,7 @@ const UserDetail = ({
 
 const UserPage = () => {
   const { id } = useParams<{ id?: string }>()
+
   const userPromise = useMemo(() => {
     if (!id) return
     return API.getUser(id)
