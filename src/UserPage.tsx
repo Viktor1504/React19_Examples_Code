@@ -47,9 +47,8 @@ const UserDetail = ({
   // Проверка несохраненных изменений
   const shouldBlock = useCallback<BlockerFunction>(
     ({ currentLocation, nextLocation }) =>
-      (name !== user.name || age !== user.age) &&
       currentLocation.pathname !== nextLocation.pathname,
-    [name, user.name, age, user.age],
+    [],
   )
 
   const blocker = useBlocker(isEditing ? shouldBlock : () => false)
@@ -65,10 +64,8 @@ const UserDetail = ({
   const handleDelete = useCallback(
     async (id: string, e: MouseEvent) => {
       e.stopPropagation()
-      if (blocker.state === 'blocked') {
-        return // Ждем решения пользователя через модальный диалог
-      }
       try {
+        setIsEditing(false)
         await API.deleteUser(id)
         navigate('/users')
       } catch (error) {
@@ -76,7 +73,7 @@ const UserDetail = ({
         alert('Не удалось удалить пользователя ' + err.message)
       }
     },
-    [blocker.state, navigate],
+    [navigate],
   )
 
   const handleAction = useCallback(
