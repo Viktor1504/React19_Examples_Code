@@ -13,7 +13,6 @@ const Users = ({
   searchParams: URLSearchParams
 }) => {
   // const locale = useLocation()
-  //
   // console.log(locale) // Выводим информацию о местоположении
 
   const value = searchParams.get('criteria')?.toLowerCase()

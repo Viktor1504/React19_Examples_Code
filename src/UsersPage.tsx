@@ -10,7 +10,7 @@ import InputSearch from './InputSearch.tsx'
 const UsersPage = () => {
   const navigate = useNavigate()
   const [usersPromise, setUsersPromise] = useState(API.fetchUsers())
-  const [searchParams, setSearchParams] = useSearchParams('')
+  const [searchParams, setSearchParams] = useSearchParams({ query: 'default' })
 
   const refetchUsers = () =>
     startTransition(() => setUsersPromise(API.fetchUsers()))

@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router'
+import { createBrowserRouter, ScrollRestoration, Outlet } from 'react-router'
 import MainPage from './MainPage.tsx'
 import NotFound from './NotFound.tsx'
 import UsersPage from './UsersPage.tsx'
@@ -6,25 +6,36 @@ import UserPage from './UserPage.tsx'
 
 const router = createBrowserRouter([
   {
-    index: true,
-    Component: MainPage,
-  },
-  {
-    path: 'users',
+    path: '/',
+    element: (
+      <>
+        <Outlet />
+        <ScrollRestoration />
+      </>
+    ),
     children: [
       {
         index: true,
-        Component: UsersPage,
+        Component: MainPage,
       },
       {
-        path: ':id',
-        Component: UserPage,
+        path: 'users',
+        children: [
+          {
+            index: true,
+            Component: UsersPage,
+          },
+          {
+            path: ':id',
+            Component: UserPage,
+          },
+        ],
+      },
+      {
+        path: '*',
+        Component: NotFound,
       },
     ],
-  },
-  {
-    path: '*',
-    Component: NotFound,
   },
 ])
 
