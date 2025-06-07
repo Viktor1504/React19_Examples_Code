@@ -9,11 +9,13 @@ const AddUser = ({
     const name = formData.get('name') as string
     const age = Number(formData.get('age'))
     const email = formData.get('email') as string
+    const done = formData.get('done') as 'on' | null
     const newUser: User = {
       id: crypto.randomUUID(),
       name,
       age,
       email,
+      done,
     }
     dispatch({ type: 'ADD_USER', payload: newUser })
   }
@@ -46,6 +48,10 @@ const AddUser = ({
           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
+        <div className="flex items-center space-x-2">
+          <label htmlFor="done">Женат</label>
+          <input name="done" type={'checkbox'} id="done" />
+        </div>
       </div>
       <button
         type="submit"

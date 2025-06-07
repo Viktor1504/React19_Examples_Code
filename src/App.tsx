@@ -1,12 +1,12 @@
 import { useReducer } from 'react'
-import { todoReducer } from './todoReducer.ts'
+import { todoReducer, User } from './todoReducer.ts'
 import Users from './Users.tsx'
 import AddUser from './AddUser.tsx'
 
-const initialUsers = [
-  { id: '1', name: 'John', age: 30, email: 'Xk9Yr@example.com' },
-  { id: '2', name: 'Jane', age: 25, email: 'Tt9wO@example.com' },
-  { id: '3', name: 'Bob', age: 40, email: 'z4tHq@example.com' },
+const initialUsers: User[] = [
+  { id: '1', name: 'John', age: 30, email: 'Xk9Yr@example.com', done: 'on' },
+  { id: '2', name: 'Jane', age: 25, email: 'Tt9wO@example.com', done: null },
+  { id: '3', name: 'Bob', age: 40, email: 'z4tHq@example.com', done: null },
 ]
 
 const App = () => {

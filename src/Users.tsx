@@ -23,6 +23,7 @@ const Users = ({
                 <p className="font-medium">Name: {user.name}</p>
                 <p>Age: {user.age}</p>
                 <p>Email: {user.email}</p>
+                <p>Женат: {user.done ? 'Да' : 'Нет'}</p>
               </div>
               <button
                 onClick={() => dispatch({ type: 'DELETE_USER', payload: user })}

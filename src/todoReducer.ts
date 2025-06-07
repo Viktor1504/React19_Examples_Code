@@ -3,6 +3,7 @@ export type User = {
   name: string
   age: number
   email: string
+  done: 'on' | null
 }
 
 export const todoReducer = (
