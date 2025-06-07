@@ -17,7 +17,6 @@ const AddUserPage = ({ refetchUsers }: { refetchUsers: () => void }) => {
       [hasUnsavedData],
     ),
   )
-
   const handleInputChange = () => {
     setHasUnsavedData(true)
   }
