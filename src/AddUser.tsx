@@ -20,6 +20,7 @@ const AddUser = ({
     dispatch({ type: 'ADD_USER', payload: newUser })
   }
 
+  console.log('render')
   return (
     <form
       action={handleSubmit}
