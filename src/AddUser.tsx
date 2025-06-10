@@ -1,21 +1,18 @@
-const AddUser = ({
-  dispatch,
-}: {
-  dispatch: (action: { type: string; payload: User }) => void
-}) => {
+import { addTodoAC, Todo } from './todoReducer.ts'
+import { useAppDispatch } from './store.ts'
+
+const AddTodo = () => {
+  const dispatch = useAppDispatch()
+
   const handleSubmit = (formData: FormData) => {
-    const name = formData.get('name') as string
-    const age = Number(formData.get('age'))
-    const email = formData.get('email') as string
-    const done = formData.get('done') as 'on' | null
-    const newUser: User = {
+    const title = formData.get('title') as string
+    const married = formData.get('married') as 'on' | null
+    const newUser: Todo = {
       id: crypto.randomUUID(),
-      name,
-      age,
-      email,
-      done,
+      title,
+      married,
     }
-    dispatch({ type: 'ADD_USER', payload: newUser })
+    dispatch(addTodoAC(newUser))
   }
 
   return (
@@ -23,42 +20,28 @@ const AddUser = ({
       action={handleSubmit}
       className="bg-white p-6 rounded-lg shadow-md space-y-4"
     >
-      <h2 className="text-xl font-semibold text-gray-800">Add New User</h2>
+      <h2 className="text-xl font-semibold text-gray-800">Add New Todo</h2>
       <div className="space-y-3">
         <input
-          name="name"
+          name="title"
           type="text"
-          placeholder="Name"
-          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          required
-        />
-        <input
-          name="age"
-          type="number"
-          placeholder="Age"
-          className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          required
-        />
-        <input
-          name="email"
-          type="email"
-          placeholder="Email"
+          placeholder="Title"
           className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
         <div className="flex items-center space-x-2">
-          <label htmlFor="done">Женат</label>
-          <input name="done" type={'checkbox'} id="done" />
+          <label htmlFor="married">Женат</label>
+          <input name="married" type={'checkbox'} id="married" />
         </div>
       </div>
       <button
         type="submit"
         className="w-full bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 transition-colors"
       >
-        Add User
+        Add Todo
       </button>
     </form>
   )
 }
 
-export default AddUser
+export default AddTodo
