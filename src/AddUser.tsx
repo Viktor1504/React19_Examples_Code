@@ -4,20 +4,21 @@ import { useAppDispatch } from './store.ts'
 const AddTodo = () => {
   const dispatch = useAppDispatch()
 
-  const handleSubmit = (formData: FormData) => {
+  const handleAction = (formData: FormData) => {
     const title = formData.get('title') as string
-    const married = formData.get('married') as 'on' | null
+    const married = formData.get('married') === 'on'
     const newUser: Todo = {
       id: crypto.randomUUID(),
       title,
       married,
+      done: false,
     }
     dispatch(addTodoAC(newUser))
   }
 
   return (
     <form
-      action={handleSubmit}
+      action={handleAction}
       className="bg-white p-6 rounded-lg shadow-md space-y-4"
     >
       <h2 className="text-xl font-semibold text-gray-800">Add New Todo</h2>
@@ -31,7 +32,7 @@ const AddTodo = () => {
         />
         <div className="flex items-center space-x-2">
           <label htmlFor="married">Женат</label>
-          <input name="married" type={'checkbox'} id="married" />
+          <input id="married" name="married" type={'checkbox'} />
         </div>
       </div>
       <button

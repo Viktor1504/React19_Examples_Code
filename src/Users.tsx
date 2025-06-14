@@ -1,10 +1,9 @@
 import { useSelector } from 'react-redux'
-import { useAppDispatch, useTodosSelector } from './store.ts'
-import { deleteTodoAC } from './todoReducer.ts'
+import { selectTodos } from './selectors.ts'
+import User from './User.tsx'
 
 const Users = () => {
-  const dispatch = useAppDispatch()
-  const todos = useSelector(useTodosSelector)
+  const todos = useSelector(selectTodos)
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
@@ -14,21 +13,7 @@ const Users = () => {
       ) : (
         <div className="space-y-4">
           {todos.map((todo) => (
-            <div
-              key={todo.id}
-              className="flex justify-between items-center p-4 bg-gray-50 rounded-md border border-gray-200"
-            >
-              <div className="text-gray-700">
-                <p className="font-medium">Title: {todo.title}</p>
-                <p>Женат: {todo.married === 'on' ? 'Да' : 'Нет'}</p>
-              </div>
-              <button
-                onClick={() => dispatch(deleteTodoAC(todo.id))}
-                className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors"
-              >
-                Delete
-              </button>
-            </div>
+            <User key={todo.id} todo={todo} />
           ))}
         </div>
       )}
