@@ -1,4 +1,4 @@
-import { addTodoAC, Todo } from './todoReducer.ts'
+import { addTodoAC, Todo } from './reducers/todoReducer.ts'
 import { useAppDispatch } from './store.ts'
 import { useCallback } from 'react'
 
@@ -8,10 +8,6 @@ const AddTodo = () => {
   const handleAction = useCallback(
     (formData: FormData) => {
       const title = (formData.get('title') as string)?.trim()
-
-      if (!title) {
-        return // Валидация на пустое поле
-      }
 
       const married = formData.get('married') === 'on'
       const newUser: Todo = {
@@ -28,7 +24,6 @@ const AddTodo = () => {
 
   return (
     <form
-      data-add-todo
       action={handleAction}
       className="bg-white p-4 rounded-lg border border-gray-200 shadow-md hover:shadow-lg transition-shadow"
     >

@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { todoReducer } from './todoReducer.ts'
+import { todoReducer } from './reducers/todoReducer.ts'
 import { useDispatch } from 'react-redux'
 
 const store = configureStore({
